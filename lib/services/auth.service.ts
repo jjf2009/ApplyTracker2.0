@@ -9,6 +9,11 @@ export interface RegisterInput {
   password: string;
 }
 
+export interface LoginInput {
+  email:string,
+  password:string
+}
+
 export class AuthService {
   static async registerUser(input: RegisterInput) {
     const { name, email, password } = input;
@@ -38,4 +43,35 @@ export class AuthService {
 
     return { user: newUser, token };
   }
+
+static async loginUser(input: LoginInput) {
+  const { email, password } = input;
+
+  // 1. Find user by email
+  const user = await UserModel.findByEmail(email);
+
+  if (!user) {
+    throw new Error("INVALID_CREDENTIALS");
+  }
+
+  // 2. Compare password with bcrypt
+  const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+
+  if (!isPasswordValid) {
+    throw new Error("INVALID_CREDENTIALS");
+  }
+
+  // 3. Generate JWT
+  const jwtSecret = process.env.JWT_SECRET || "fallback_secret_for_development";
+
+  const token = jwt.sign(
+    { userId: user.id, email: user.email },
+    jwtSecret,
+    { expiresIn: "50d" }
+  );
+
+const { password_hash, ...safeUser } = user;
+
+return { user: safeUser, token };
+}
 }

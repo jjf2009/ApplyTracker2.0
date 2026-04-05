@@ -5,8 +5,8 @@ import { AuthService } from '../../../lib/services/auth.service';
 
 // 1. Controller Responsibility: Define Request Validation Schema using Zod
 const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
+  name: z.string().min(2,{message:'Name must be at least 2 characters'} ),
+  email: z.email({ message: "Invalid email" }),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
 });
 
