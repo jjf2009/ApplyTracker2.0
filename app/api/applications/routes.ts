@@ -1,66 +1,67 @@
 import { NextResponse } from "next/server";
-import { ApplicationModel } from "@/lib/models/application.model";
+import { z } from "zod";
+import { getUserFromRequest } from "@/lib/getUser";
+import { ApplicationService } from "@/lib/services/application.service";
+export const createApplicationSchema = z.object({
+  company: z.string().min(1, { message: "Company is required" }),
+
+  role: z.string().min(1, { message: "Role is required" }),
+
+  status: z.enum(["APPLIED", "INTERVIEW", "OFFER", "REJECTED"]),
+
+  method: z.enum(["COLD EMAIL", "OFFICAL MEANS"]),
+
+  appliedDate: z.string().datetime({
+    message: "Invalid date format",
+  }),
+
+  notes: z.string().optional(),
+});
 
 export async function POST(req: Request) {
-  try {
-    const body = await req.json();
+  const user = await getUserFromRequest();
 
-    const parsed = createApplicationSchema.safeParse(body);
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: "Invalid input", details: parsed.error },
-        { status: 400 }
-      );
-    }
+  const body = await req.json();
 
-    const { company, role, status, method, appliedDate, notes, userId } =
-      parsed.data;
+  const parsed = createApplicationSchema.safeParse(body);
 
-    const application = await ApplicationModel.create(
-      company,
-      role,
-      status,
-      method,
-      new Date(appliedDate),
-      notes ?? null,
-      userId
-    );
-
-    return NextResponse.json(application, { status: 201 });
-
-  } catch (error) {
-    console.error(error);
-
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "Failed to create application" },
-      { status: 500 }
+      { error: "Invalid input", details: parsed.error },
+      { status: 400 },
     );
   }
+
+  const application = await ApplicationService.createApplication(
+    parsed.data,
+    user.userId,
+  );
+
+  return NextResponse.json(application, { status: 201 });
 }
-
-export async function GET(req: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(req.url);
-    const userId = searchParams.get("userId");
+    const user = await getUserFromRequest();
 
-    if (!userId) {
-      return NextResponse.json(
-        { error: "userId required" },
-        { status: 400 }
-      );
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const applications = await ApplicationModel.findByUserId(userId);
+    const applications = await ApplicationService.getUserApplications(
+      user.userId,
+    );
 
     return NextResponse.json(applications);
-
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       { error: "Failed to fetch applications" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
