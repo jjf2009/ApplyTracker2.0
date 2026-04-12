@@ -1,97 +1,97 @@
 "use client";
-import { useState, FormEvent } from "react";
+
+import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import { useAuthStore } from "@/store/authStore";
 
-export default function LoginPage(){
+export default function LoginPage() {
   const router = useRouter();
-  const [loading,setLoading] = useState(false);
-  const [errorMsg,setErrorMsg] = useState("");
-  const [success,setSuccess] = useState(false);
+  const setUser = useAuthStore((state) => state.setUser);
 
-  async function onSubmit(event:React.SyntheticEvent<HTMLFormElement, SubmitEvent>){
-    event.preventDefault();
-    setLoading(true);
-    setErrorMsg("");
-    setSuccess(false);
-
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-
-    try{
-      const response = await fetch("/api/login",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(data),
+  const loginMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
 
-      if(!response.ok){
-        if(result.errors){
-          const firstError = Object.values(result.error)[0] as string[];
-          setErrorMsg(firstError[0]|| "Validation failed check inputs.");
-        }else{
-          setErrorMsg(result.message || "An unknown error occurred.");
-        }
-      }else{
-        setSuccess(true);
-        setTimeout(()=>{
-         router.push("/dashboard"); 
-        },2000);
+      if (!response.ok) {
+        throw new Error(result.message || "Login failed");
       }
-    }catch(err:any) {
-       setErrorMsg("Failed to connect to the server. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+
+      return result;
+    },
+
+    onSuccess: (data) => {
+      setUser(data.user); // save user globally
+      router.push("/dashboard");
+    },
+  });
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    loginMutation.mutate(data);
   }
 
   return (
     <div>
-    {errorMsg && (
+      {loginMutation.isError && (
+        <div>{(loginMutation.error as Error).message}</div>
+      )}
+
+      {loginMutation.isSuccess && (
         <div>
-          {errorMsg}
+          <span>Login successful</span>
         </div>
       )}
-    {success &&(
-      <div>
-        <span>Login done</span>
-      </div>
-    )}
-    <form onSubmit={onSubmit} >
-       <div>
-        <label htmlFor='email'>
-          Email Address
-        </label>
-        <input type='email' id='email' name='email' placeholder='elon@spacex.com'
-        autoComplete='email'required/>
-       </div>
+
+      <form onSubmit={onSubmit}>
         <div>
-        <label htmlFor='password'>
-          Email Address
-        </label>
-        <input type='password' id='password' name='passowrd' placeholder="••••••••" autoComplete="new-password" required/>
-       </div>
-       <button 
-       type="submit"
-       disabled={loading || success}>
-        <span>
-          {loading ? (
-            <> Processing..</>
-           
-          ):(
-            "Create Account"
-          )}
-        </span>
-       </button>
-    </form>
-    <div>
-      <p>
-        Don't have an account?{" "}
-        <Link href="/register">Sign in</Link>
-      </p>
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="elon@spacex.com"
+            autoComplete="email"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            autoComplete="current-password"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loginMutation.isPending || loginMutation.isSuccess}
+        >
+          {loginMutation.isPending ? "Processing..." : "Login"}
+        </button>
+      </form>
+
+      <div>
+        <p>
+          Don't have an account? <Link href="/register">Sign up</Link>
+        </p>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
