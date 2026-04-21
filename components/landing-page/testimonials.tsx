@@ -2,7 +2,7 @@ import { Quotes, Star } from "@phosphor-icons/react/dist/ssr";
 
 const testimonials = [
   {
-    quote: "eztrackr saved my sanity. I was applying to 30 jobs a week and kept missing follow-ups. Since switching, I've landed 3 interviews in two weeks.",
+    quote: "trackezz saved my sanity. I was applying to 30 jobs a week and kept missing follow-ups. Since switching, I've landed 3 interviews in two weeks.",
     author: "Sarah Jenkins",
     role: "UX Designer",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2787&auto=format&fit=crop"

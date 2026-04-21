@@ -1,8 +1,6 @@
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/landing-page/hero";
 import { Features } from "@/components/landing-page/features";
-import { Testimonials } from "@/components/landing-page/testimonials";
-import { Pricing } from "@/components/landing-page/pricing";
 import { FAQ } from "@/components/landing-page/faq";
 import { CTA } from "@/components/landing-page/cta";
 import { Footer } from "@/components/landing-page/footer";
@@ -23,8 +21,6 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Features />
-      <Testimonials />
-      <Pricing />
       <FAQ />
       <CTA />
       <Footer />

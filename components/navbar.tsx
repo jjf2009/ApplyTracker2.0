@@ -21,39 +21,25 @@ export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
-        { link: "/job-tracker", label: "Job tracker" },
-        { link: "/ai-tools", label: "Free AI Tools", hasDropdown: true },
-        { link: "/organizations", label: "For Organizations" }
+        { link: "/dashboard", label: "Job tracker" },
+        { link: "/dashboard/resume-builder", label: "Resume Builder",},
+        { link: "/dashboard/cold-emailer", label: "Cold Email Expert",}
+        ,
     ];
 
     return (
-        /* 
-           - fixed: Keeps the navbar at the top while scrolling.
-           - top-6: Adds space from the top for a 'floating' effect.
-           - left-1/2 -translate-x-1/2: Perfect centering technique.
-           - w-[90%] max-w-6xl: Keeps it responsive and prevents it from being too wide on huge screens.
-           - z-50: Ensures it stays above all other content.
-        */
         <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 px-4">
             <nav className="
-                /* 
-                   - bg-white/90 backdrop-blur-md: Glassmorphism effect (semi-transparent white background).
-                   - border border-gray-100/50: Subtle border to define the shape.
-                   - shadow-[0_8px_30px_rgb(0,0,0,0.04)]: Very soft, premium shadow for depth.
-                   - rounded-full: Creates the 'pill' shape seen in the image.
-                   - px-6 py-2.5: Internal spacing.
-                */
                 bg-white/90 backdrop-blur-md border border-gray-100 shadow-xl rounded-full px-6 py-2.5 
                 flex items-center justify-between transition-all duration-300
             ">
-                {/* Logo Section */}
                 <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105 active:scale-95">
                     {/* Purple Icon Container */}
                     <div className="bg-[#6b21a8] p-1.5 rounded-lg">
                         <Tag weight="fill" className="text-white w-5 h-5" />
                     </div>
                     {/* tracking-tight makes font look more professional/modern */}
-                    <span className="text-xl font-bold tracking-tight text-gray-900">eztrackr</span>
+                    <span className="text-xl font-bold tracking-tight text-gray-900">trackezz</span>
                 </Link>
 
                 {/* Desktop Navigation Links (Hidden on mobile) */}
@@ -69,7 +55,6 @@ export function Navbar() {
                             "
                         >
                             {link.label}
-                            {link.hasDropdown && <CaretDown size={14} weight="bold" className="mt-0.5" />}
                         </Link>
                     ))}
                 </div>
@@ -83,7 +68,7 @@ export function Navbar() {
                         Login
                     </Link>
                     <Link 
-                        href="/sign-up" 
+                        href="/register" 
                         className="
                             bg-[#6b21a8] text-white px-6 py-2.5 rounded-full 
                             font-semibold text-sm shadow-md 

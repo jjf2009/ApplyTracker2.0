@@ -8,22 +8,22 @@ import {
 } from "@/components/ui/accordion";
 
 const faqs = [
-  {
-    q: "How does the browser extension work?",
-    a: "Our browser extension automatically detects job application submission buttons on major platforms like LinkedIn, Indeed, and Greenhouse. When you click 'Submit', it captures the company name, role, and URL, saving them to your eztrackr dashboard instantly."
-  },
+  // {
+  //   q: "How does the browser extension work?",
+  //   a: "Our browser extension automatically detects job application submission buttons on major platforms like LinkedIn, Indeed, and Greenhouse. When you click 'Submit', it captures the company name, role, and URL, saving them to your eztrackr dashboard instantly."
+  // },
   {
     q: "Is my application data secure?",
     a: "Absolutely. We use industry-standard encryption (AES-256) to secure your data at rest and TLS for data in transit. We never sell your personal information or application history to third parties."
   },
   {
     q: "Can I import data from my existing spreadsheet?",
-    a: "Yes! eztrackr supports CSV and Excel imports. You can map your existing columns to our fields in minutes and pick up right where you left off."
+    a: "Yes! trackerezz supports CSV and Excel imports. You can map your existing columns to our fields in minutes and pick up right where you left off."
   },
-  {
-    q: "How does the AI Interview Prep feature work?",
-    a: "The AI analyzes the job description you've saved and compares it against thousands of successful interview transcripts for similar roles. It generates the top 5 questions you're likely to face and provides feedback on how to structure your answers."
-  },
+  // {
+  //   q: "How does the AI Interview Prep feature work?",
+  //   a: "The AI analyzes the job description you've saved and compares it against thousands of successful interview transcripts for similar roles. It generates the top 5 questions you're likely to face and provides feedback on how to structure your answers."
+  // },
   {
     q: "Is there a mobile app?",
     a: "While we don't have a native app yet, eztrackr is a Progressive Web App (PWA). You can 'Add to Home Screen' on iOS or Android for a full-screen, native-like experience on the go."

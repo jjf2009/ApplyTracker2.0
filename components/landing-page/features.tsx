@@ -1,27 +1,21 @@
 import { CheckCircle, Lightning, ChartPieSlice, Robot } from "@phosphor-icons/react/dist/ssr";
 
 const features = [
-  {
-    title: "One-Click Application Tracking",
-    description: "Say goodbye to manual entry. Our browser extension detects when you submit an application and saves it to your dashboard instantly.",
-    icon: <Lightning size={32} weight="fill" className="text-purple-600" />,
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop",
-    badge: "Most Popular"
-  },
-  {
-    title: "AI-Powered Interview Prep",
+    {
+    title: "AI-Powered Resume Builder",
     description: "Upload a job description and receive a personalized list of likely interview questions, tailored hints, and best-practice answers.",
     icon: <Robot size={32} weight="fill" className="text-purple-600" />,
     image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2670&auto=format&fit=crop",
     badge: "Beta"
   },
   {
-    title: "Insightful Search Analytics",
-    description: "Identify which resumes are getting hits and which platforms are wasting your time with detailed conversion funnels and tracking.",
-    icon: <ChartPieSlice size={32} weight="fill" className="text-purple-600" />,
-    image: "https://images.unsplash.com/photo-1551288049-bbbda536639a?q=80&w=2670&auto=format&fit=crop",
-    badge: "Insight"
-  }
+    title: "One-Click Application Tracking",
+    description: "Say goodbye to manual entry. Our browser extension detects when you submit an application and saves it to your dashboard instantly.",
+    icon: <Lightning size={32} weight="fill" className="text-purple-600" />,
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop",
+    badge: "Coming Soon"
+  },
+
 ];
 
 export function Features() {
