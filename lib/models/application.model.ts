@@ -8,6 +8,9 @@ export interface Application {
   status: 'APPLIED' | 'INTERVIEW' | 'OFFER' | 'REJECTED';
   method: 'COLD EMAIL' | 'OFFICAL MEANS';
   applied_date: string;
+  salary_range: string | null;
+  interview_date: string | null;
+  location: string | null;
   notes: string | null;
   created_at: string;
 }
@@ -26,6 +29,9 @@ export class ApplicationModel {
       status: Application['status'];
       method: Application['method'];
       applied_date: string;
+      salary_range?: string | null;
+      interview_date?: string | null;
+      location?: string | null;
       notes: string | null;
     },
   ): Promise<Application> {

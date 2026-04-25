@@ -41,6 +41,7 @@ export function Hero() {
               alt="eztrackr dashboard showing job applications tracking" 
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
               priority
             />
           </div>

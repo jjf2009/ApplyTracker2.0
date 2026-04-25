@@ -40,14 +40,15 @@ export default function AuthLayout({
           <div className="w-12 h-12 rounded-full bg-white/20 overflow-hidden border-2 border-white/30 relative">
              <Image
                src="/testimonials/vishanth.png"
-               alt="Shridhar Kamat"
+               alt="Vishanth Surresh"
                fill
+               sizes="48px"
                className="object-cover"
              />
           </div>
           <div>
-            <div className="font-bold text-lg">Shridhar Kamat</div>
-            <div className="text-white/70 text-sm italic">Intern at Oracle</div>
+            <div className="font-bold text-lg">Vishanth Surresh</div>
+            <div className="text-white/70 text-sm italic">Data Engineer at Intact</div>
           </div>
         </div>
 

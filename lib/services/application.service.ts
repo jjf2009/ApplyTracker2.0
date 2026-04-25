@@ -7,6 +7,9 @@ export interface CreateApplicationInput {
   status: 'APPLIED' | 'INTERVIEW' | 'OFFER' | 'REJECTED';
   method: 'COLD EMAIL' | 'OFFICAL MEANS';
   appliedDate: string;
+  salaryRange?: string;
+  interviewDate?: string;
+  location?: string;
   notes?: string;
 }
 
@@ -23,6 +26,9 @@ export class ApplicationService {
       status: input.status,
       method: input.method,
       applied_date: input.appliedDate,
+      salary_range: input.salaryRange ?? null,
+      interview_date: input.interviewDate ?? null,
+      location: input.location ?? null,
       notes: input.notes ?? null,
     });
   }
@@ -46,6 +52,9 @@ export class ApplicationService {
     if (updates.status !== undefined) dbUpdates.status = updates.status;
     if (updates.method !== undefined) dbUpdates.method = updates.method;
     if (updates.appliedDate !== undefined) dbUpdates.applied_date = updates.appliedDate;
+    if (updates.salaryRange !== undefined) dbUpdates.salary_range = updates.salaryRange;
+    if (updates.interviewDate !== undefined) dbUpdates.interview_date = updates.interviewDate;
+    if (updates.location !== undefined) dbUpdates.location = updates.location;
     if (updates.notes !== undefined) dbUpdates.notes = updates.notes;
 
     const updated = await ApplicationModel.update(supabase, applicationId, dbUpdates);
