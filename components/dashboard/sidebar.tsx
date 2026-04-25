@@ -16,6 +16,11 @@ import {
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import { useAuthStore } from "@/store/authStore";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { SignOut } from "@phosphor-icons/react";
+
 const navItems = [
   {
     label: "MAIN",
@@ -26,30 +31,32 @@ const navItems = [
   {
     label: "JOB BOARD",
     items: [
-      { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase },
-      { name: "Interviews", href: "/dashboard/interviews", icon: SealQuestion },
-      { name: "Saved Resume", href: "/dashboard/resume", icon: FileText },
-      { name: "Survey Request", href: "/dashboard/survey", icon: Clipboard },
+      { name: "Cold Email Expert", href: "/dashboard/cold-emailer", icon: SealQuestion },
+      { name: "Resume Builder", href: "/dashboard/resume-builder", icon: FileText },
     ],
   },
-  {
-    label: "TOOLS",
-    items: [
-      { name: "Events", href: "/dashboard/events", icon: Calendar },
-      { name: "Report An Exit", href: "/dashboard/exit", icon: PaperPlaneTilt },
-      { name: "Settings", href: "/dashboard/settings", icon: Gear },
-    ],
-  },
+
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const user = useAuthStore((state) => state.user);
+  
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  const displayName = user?.user_metadata?.name || user?.email?.split('@')[0] || "User";
+  const initials = displayName.substring(0, 2).toUpperCase();
 
   return (
     <div className="flex flex-col h-screen w-64 border-r bg-white p-6">
       <div className="flex items-center gap-2 px-2 mb-10">
         <div className="flex items-center gap-1">
-          <span className="text-xl font-bold tracking-tight">interview</span>
+          <span className="text-xl font-bold tracking-tight text-[#6b21a8]">trackerezz</span>
           <div className="flex gap-1 ml-1">
             <div className="w-2 h-2 rounded-full bg-blue-500" />
             <div className="w-2 h-2 rounded-full bg-yellow-400" />
@@ -88,18 +95,24 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="mt-auto pt-6 border-t">
+      <div className="mt-auto pt-6 border-t flex flex-col gap-4">
         <div className="flex items-center gap-3 px-2">
           <Avatar className="h-9 w-9">
-            <AvatarImage src="/avatar.jpg" alt="Aliah Lane" />
-            <AvatarFallback>AL</AvatarFallback>
+            <AvatarFallback className="bg-[#6b21a8] text-white text-xs">{initials}</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">Aliah Lane</p>
-            <p className="text-xs text-gray-500 truncate">aliahlane25@gmail.com</p>
+            <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
+            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
           </div>
-          <CaretRight size={14} className="text-gray-400" />
         </div>
+        
+        <button 
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-2 py-2 text-sm font-medium text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+        >
+          <SignOut size={20} />
+          Logout
+        </button>
       </div>
     </div>
   );

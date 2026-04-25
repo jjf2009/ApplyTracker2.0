@@ -33,17 +33,21 @@ export default function AuthLayout({
         </div>
 
         <blockquote className="text-2xl xl:text-3xl font-medium leading-relaxed mb-12">
-          Eztrackr has significantly improved my job hunting experience. Now I can focus more on preparing interviews and less on managing and tracking applications. Would highly recommend it to people who are actively applying for jobs.
+          Trackerezz has significantly improved my job hunting experience. Now I can focus more on preparing interviews and less on managing and tracking applications. Would highly recommend it to people who are actively applying for jobs.
         </blockquote>
 
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-white/20 overflow-hidden border-2 border-white/30">
-             {/* Placeholder for avatar */}
-             <div className="w-full h-full bg-zinc-400 flex items-center justify-center text-xs">VS</div>
+          <div className="w-12 h-12 rounded-full bg-white/20 overflow-hidden border-2 border-white/30 relative">
+             <Image
+               src="/testimonials/vishanth.png"
+               alt="Shridhar Kamat"
+               fill
+               className="object-cover"
+             />
           </div>
           <div>
-            <div className="font-bold text-lg">Vishanth Surresh</div>
-            <div className="text-white/70 text-sm italic">Data Engineer at Intact</div>
+            <div className="font-bold text-lg">Shridhar Kamat</div>
+            <div className="text-white/70 text-sm italic">Intern at Oracle</div>
           </div>
         </div>
 

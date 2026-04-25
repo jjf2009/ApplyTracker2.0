@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useApplications } from "@/hooks/use-applications";
-import { DashboardTabs } from "@/components/dashboard/tabs";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { ApplicationsStats } from "@/components/dashboard/stats";
 import { FilterBar } from "@/components/dashboard/filters";
@@ -39,7 +38,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50/30">
-      <DashboardTabs />
+
       <DashboardHeader />
       <ApplicationsStats count={applications.length} />
       <FilterBar activeFilter={filter} onFilterChange={setFilter} />

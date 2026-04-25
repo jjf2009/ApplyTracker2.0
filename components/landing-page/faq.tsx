@@ -59,7 +59,7 @@ export function FAQ() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} 
         />
 
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" className="w-full">
           {faqs.map((faq, i) => (
             <AccordionItem key={i} value={`item-${i}`} className="border-gray-200">
               <AccordionTrigger className="text-left text-lg font-semibold text-gray-900 hover:text-purple-600 transition-colors py-6">

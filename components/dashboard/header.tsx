@@ -15,10 +15,10 @@ export function DashboardHeader() {
             className="pl-10 bg-gray-50/50 border-none h-10 w-full"
           />
         </div>
-        <button className="p-2 rounded-full hover:bg-gray-100 transition-colors relative">
+        {/* <button className="p-2 rounded-full hover:bg-gray-100 transition-colors relative">
           <Bell size={24} weight="regular" />
           <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
-        </button>
+        </button> */}
       </div>
     </div>
   );

@@ -1,63 +1,70 @@
-import { ApplicationModel } from "../models/application.model";
+import { SupabaseClient } from '@supabase/supabase-js';
+import { ApplicationModel, Application } from '../models/application.model';
 
 export interface CreateApplicationInput {
   company: string;
   role: string;
-  status: "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED";
-  method: "COLD EMAIL" | "OFFICAL MEANS";
+  status: 'APPLIED' | 'INTERVIEW' | 'OFFER' | 'REJECTED';
+  method: 'COLD EMAIL' | 'OFFICAL MEANS';
   appliedDate: string;
   notes?: string;
 }
 
 export class ApplicationService {
   static async createApplication(
+    supabase: SupabaseClient,
     input: CreateApplicationInput,
     userId: string,
-  ) {
-    const { company, role, status, method, appliedDate, notes } = input;
-
-    const application = await ApplicationModel.create(
-      company,
-      role,
-      status,
-      method,
-      new Date(appliedDate),
-      notes ?? null,
-      userId,
-    );
-
-    return application;
+  ): Promise<Application> {
+    return ApplicationModel.create(supabase, {
+      user_id: userId,
+      company: input.company,
+      role: input.role,
+      status: input.status,
+      method: input.method,
+      applied_date: input.appliedDate,
+      notes: input.notes ?? null,
+    });
   }
 
-  static async getUserApplications(userId: string) {
-    const applications = await ApplicationModel.findByUserId(userId);
-
-    return applications;
+  static async getUserApplications(
+    supabase: SupabaseClient,
+  ): Promise<Application[]> {
+    // RLS scopes results to the authenticated user automatically
+    return ApplicationModel.findByUserId(supabase);
   }
 
   static async updateApplication(
-    applicationId: string,
-    userId: string,
+    supabase: SupabaseClient,
+    applicationId: number,
     updates: Partial<CreateApplicationInput>,
-  ) {
-    const updated = await ApplicationModel.update(
-      applicationId,
-      userId,
-      updates,
-    );
+  ): Promise<Application> {
+    // Map camelCase input to snake_case DB columns
+    const dbUpdates: Record<string, unknown> = {};
+    if (updates.company !== undefined) dbUpdates.company = updates.company;
+    if (updates.role !== undefined) dbUpdates.role = updates.role;
+    if (updates.status !== undefined) dbUpdates.status = updates.status;
+    if (updates.method !== undefined) dbUpdates.method = updates.method;
+    if (updates.appliedDate !== undefined) dbUpdates.applied_date = updates.appliedDate;
+    if (updates.notes !== undefined) dbUpdates.notes = updates.notes;
+
+    const updated = await ApplicationModel.update(supabase, applicationId, dbUpdates);
 
     if (!updated) {
-      throw new Error("APPLICATION_NOT_FOUND");
+      throw new Error('APPLICATION_NOT_FOUND');
     }
 
     return updated;
   }
 
-  static async deleteApplication(applicationId: string, userId: string) {
-    const deleted = await ApplicationModel.delete(applicationId, userId);
+  static async deleteApplication(
+    supabase: SupabaseClient,
+    applicationId: number,
+  ): Promise<{ success: boolean }> {
+    const deleted = await ApplicationModel.delete(supabase, applicationId);
 
     if (!deleted) {
-      throw new Error("APPLICATION_NOT_FOUND");
+      throw new Error('APPLICATION_NOT_FOUND');
     }
 
     return { success: true };

@@ -14,12 +14,15 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface Application {
-  id: string;
+  id: number;
+  user_id: string;
   company: string;
   role: string;
   status: "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED";
   method: "COLD EMAIL" | "OFFICAL MEANS";
-  appliedDate: Date;
+  applied_date: string;
+  notes: string | null;
+  created_at: string;
   // Mock fields for UI parity
   salary?: string;
   interviewType?: string;
@@ -67,7 +70,7 @@ export function ApplicationsTable({ applications }: ApplicationsTableProps) {
               <TableCell className="text-gray-600 font-medium">{app.role}</TableCell>
               <TableCell className="text-gray-500">{app.salary || "$2500–$3200"}</TableCell>
               <TableCell className="text-gray-500">
-                {new Date(app.appliedDate).toLocaleDateString("en-GB", {
+                {new Date(app.applied_date).toLocaleDateString("en-GB", {
                   day: "2-digit",
                   month: "short",
                   year: "numeric",
