@@ -7,10 +7,10 @@ export interface CreateApplicationInput {
   status: 'APPLIED' | 'INTERVIEW' | 'OFFER' | 'REJECTED';
   method: 'COLD EMAIL' | 'OFFICAL MEANS';
   appliedDate: string;
-  salaryRange?: string;
-  interviewDate?: string;
-  location?: string;
-  notes?: string;
+  salaryRange?: string | null;
+  interviewDate?: string | null;
+  location?: string | null;
+  notes?: string | null;
 }
 
 export class ApplicationService {

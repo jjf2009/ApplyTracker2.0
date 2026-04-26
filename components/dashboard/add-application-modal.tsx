@@ -16,7 +16,7 @@ import { ApplicationForm } from "./application-form"
 
 interface ApplicationModalProps {
   application?: Application | null
-  trigger?: React.ReactNode
+  trigger?: React.ReactElement
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }

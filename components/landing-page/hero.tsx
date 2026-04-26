@@ -34,7 +34,7 @@ export function Hero() {
           </Button>
         </div>
         {/* Hero image/mockup placeholder */}
-        <div className="mt-16 relative w-full max-w-5xl mx-auto rounded-2xl border border-gray-200 bg-white p-2 shadow-2xl">
+        {/* <div className="mt-16 relative w-full max-w-5xl mx-auto rounded-2xl border border-gray-200 bg-white p-2 shadow-2xl">
           <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-gray-50 border border-gray-100">
             <Image 
               src="/dashboard-preview.png" 
@@ -45,7 +45,7 @@ export function Hero() {
               priority
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
