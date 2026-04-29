@@ -1,0 +1,44 @@
+"use client";
+import { ResumeForm } from "@/types/resume";
+
+type Props = { data: ResumeForm; onChange: (d: ResumeForm) => void };
+
+export default function AchievementsFields({ data, onChange }: Props) {
+  const { achievements } = data;
+
+  function update(index: number, value: string) {
+    const updated = achievements.map((a, i) => i === index ? value : a);
+    onChange({ ...data, achievements: updated });
+  }
+
+  function remove(index: number) {
+    onChange({ ...data, achievements: achievements.filter((_, i) => i !== index) });
+  }
+
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-xs uppercase tracking-widest text-gray-500">Achievements</h2>
+        <button
+          onClick={() => onChange({ ...data, achievements: [...achievements, ""] })}
+          className="text-xs text-purple-400 hover:text-purple-300"
+        >
+          + Add
+        </button>
+      </div>
+      <div className="space-y-2">
+        {achievements.map((a, i) => (
+          <div key={i} className="flex gap-2">
+            <input
+              value={a}
+              onChange={e => update(i, e.target.value)}
+              placeholder="e.g. 2x Hackathon Winner – ..."
+              className="flex-1 bg-gray-800 text-white text-sm px-3 py-2 rounded border border-gray-700 focus:border-purple-500 focus:outline-none"
+            />
+            <button onClick={() => remove(i)} className="text-red-400 text-xs px-2">×</button>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
