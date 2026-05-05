@@ -1,7 +1,5 @@
 "use client";
-import { ResumeForm } from "@/types/resume";
-
-type Props = { data: ResumeForm; onChange: (d: ResumeForm) => void };
+import { useResumeStore } from "@/store/useResumeStore";
 
 const skillFields = [
   { key: "languages", label: "Languages" },
@@ -10,7 +8,9 @@ const skillFields = [
   { key: "devops", label: "DevOps & Tools" },
 ] as const;
 
-export default function SkillsFields({ data, onChange }: Props) {
+export default function SkillsFields() {
+  const { formData, updateSkills } = useResumeStore();
+
   return (
     <section>
       <h2 className="text-xs uppercase tracking-widest text-gray-500 mb-3">Technical Skills</h2>
@@ -19,8 +19,8 @@ export default function SkillsFields({ data, onChange }: Props) {
           <div key={f.key}>
             <label className="block text-xs text-gray-600 mb-1">{f.label}</label>
             <input
-              value={data.skills[f.key]}
-              onChange={e => onChange({ ...data, skills: { ...data.skills, [f.key]: e.target.value } })}
+              value={formData.skills[f.key]}
+              onChange={e => updateSkills(f.key, e.target.value)}
               className="w-full bg-white text-gray-900 text-sm px-3 py-2 rounded border border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
             />
           </div>

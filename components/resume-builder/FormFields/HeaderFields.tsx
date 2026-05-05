@@ -1,7 +1,6 @@
 "use client";
+import { useResumeStore } from "@/store/useResumeStore";
 import { ResumeForm } from "@/types/resume";
-
-type Props = { data: ResumeForm; onChange: (d: ResumeForm) => void };
 
 const fields = [
   { key: "name", label: "Full Name", placeholder: "Jared John Furtado" },
@@ -12,7 +11,9 @@ const fields = [
   { key: "portfolio", label: "Portfolio URL", placeholder: "www.jaredfurtado.tech" },
 ] as const;
 
-export default function HeaderFields({ data, onChange }: Props) {
+export default function HeaderFields() {
+  const { formData, updateField } = useResumeStore();
+
   return (
     <section>
       <h2 className="text-xs uppercase tracking-widest text-gray-500 mb-3">Header</h2>
@@ -21,8 +22,8 @@ export default function HeaderFields({ data, onChange }: Props) {
           <div key={f.key}>
             <label className="block text-xs text-gray-600 mb-1">{f.label}</label>
             <input
-              value={(data as any)[f.key]}
-              onChange={e => onChange({ ...data, [f.key]: e.target.value })}
+              value={(formData as any)[f.key]}
+              onChange={e => updateField(f.key as keyof ResumeForm, e.target.value)}
               placeholder={f.placeholder}
               className="w-full bg-white text-gray-900 text-sm px-3 py-2 rounded border border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
             />

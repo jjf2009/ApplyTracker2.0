@@ -1,18 +1,21 @@
 "use client";
-import { ResumeForm } from "@/types/resume";
+import { useResumeStore } from "@/store/useResumeStore";
 
-type Props = { data: ResumeForm; onChange: (d: ResumeForm) => void };
-
-export default function AchievementsFields({ data, onChange }: Props) {
-  const { achievements } = data;
+export default function AchievementsFields() {
+  const { formData, updateAchievements } = useResumeStore();
+  const { achievements } = formData;
 
   function update(index: number, value: string) {
     const updated = achievements.map((a, i) => i === index ? value : a);
-    onChange({ ...data, achievements: updated });
+    updateAchievements(updated);
   }
 
   function remove(index: number) {
-    onChange({ ...data, achievements: achievements.filter((_, i) => i !== index) });
+    updateAchievements(achievements.filter((_, i) => i !== index));
+  }
+
+  function add() {
+    updateAchievements([...achievements, ""]);
   }
 
   return (
@@ -20,7 +23,7 @@ export default function AchievementsFields({ data, onChange }: Props) {
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xs uppercase tracking-widest text-gray-500">Achievements</h2>
         <button
-          onClick={() => onChange({ ...data, achievements: [...achievements, ""] })}
+          onClick={add}
           className="text-xs text-purple-600 hover:text-purple-700 font-medium"
         >
           + Add

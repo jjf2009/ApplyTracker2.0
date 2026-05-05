@@ -12,6 +12,7 @@ export type Project = {
   id: string;
   title: string;
   url: string;
+  year: string;         // e.g. "2024" or "Jan 2024 - Present"
   techStack: string;    // comma-separated string, e.g. "React.js, Node.js, Firebase"
   bullets: string[];
 };

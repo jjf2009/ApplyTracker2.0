@@ -1,46 +1,25 @@
 "use client";
-import { ResumeForm, Project } from "@/types/resume";
+import { Project } from "@/types/resume";
+import { useResumeStore } from "@/store/useResumeStore";
 
-type Props = { data: ResumeForm; onChange: (d: ResumeForm) => void };
-
-function newProject(): Project {
-  return { id: crypto.randomUUID(), title: "", url: "", techStack: "", bullets: [""] };
-}
-
-export default function ProjectFields({ data, onChange }: Props) {
-  const { projects } = data;
-
-  function updateProject(index: number, field: keyof Project, value: any) {
-    const updated = projects.map((p, i) => i === index ? { ...p, [field]: value } : p);
-    onChange({ ...data, projects: updated });
-  }
+export default function ProjectFields() {
+  const { formData, addProject, removeProject, updateProject } = useResumeStore();
+  const { projects } = formData;
 
   function updateBullet(projIdx: number, bulletIdx: number, value: string) {
-    const updated = projects.map((p, i) => {
-      if (i !== projIdx) return p;
-      const bullets = p.bullets.map((b, j) => j === bulletIdx ? value : b);
-      return { ...p, bullets };
-    });
-    onChange({ ...data, projects: updated });
+    const bullets = [...projects[projIdx].bullets];
+    bullets[bulletIdx] = value;
+    updateProject(projIdx, "bullets", bullets);
   }
 
   function addBullet(projIdx: number) {
-    const updated = projects.map((p, i) =>
-      i === projIdx ? { ...p, bullets: [...p.bullets, ""] } : p
-    );
-    onChange({ ...data, projects: updated });
+    const bullets = [...projects[projIdx].bullets, ""];
+    updateProject(projIdx, "bullets", bullets);
   }
 
   function removeBullet(projIdx: number, bulletIdx: number) {
-    const updated = projects.map((p, i) => {
-      if (i !== projIdx) return p;
-      return { ...p, bullets: p.bullets.filter((_, j) => j !== bulletIdx) };
-    });
-    onChange({ ...data, projects: updated });
-  }
-
-  function removeProject(index: number) {
-    onChange({ ...data, projects: projects.filter((_, i) => i !== index) });
+    const bullets = projects[projIdx].bullets.filter((_, j) => j !== bulletIdx);
+    updateProject(projIdx, "bullets", bullets);
   }
 
   return (
@@ -48,7 +27,7 @@ export default function ProjectFields({ data, onChange }: Props) {
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xs uppercase tracking-widest text-gray-500">Projects</h2>
         <button
-          onClick={() => onChange({ ...data, projects: [...projects, newProject()] })}
+          onClick={addProject}
           className="text-xs text-purple-600 hover:text-purple-700 font-medium"
         >
           + Add
@@ -60,12 +39,18 @@ export default function ProjectFields({ data, onChange }: Props) {
           <div key={proj.id} className="bg-gray-50 rounded p-4 border border-gray-200 space-y-2">
             <div className="flex justify-between">
               <span className="text-xs text-gray-500">Project {i + 1}</span>
-              <button onClick={() => removeProject(i)} className="text-xs text-red-500 hover:text-red-600">Remove</button>
+              <button
+                onClick={() => removeProject(proj.id)}
+                className="text-xs text-red-500 hover:text-red-600"
+              >
+                Remove
+              </button>
             </div>
 
             {([
               ["title", "Project Title"],
               ["url", "Project URL (optional)"],
+              ["year", "Year / Date Range"],
               ["techStack", "Tech Stack (comma-separated)"],
             ] as [keyof Project, string][]).map(([field, label]) => (
               <div key={field}>

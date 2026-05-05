@@ -9,28 +9,30 @@ import ProjectFields from "./FormFields/ProjectFields";
 import EducationFields from "./FormFields/EducationFields";
 import AchievementsFields from "./FormFields/AchievementsFields";
 
+import { useResumeStore } from "@/store/useResumeStore";
+
 // Lazy load Monaco — do NOT SSR it
 const CodeEditor = dynamic(() => import("./CodeEditor"), { ssr: false });
 
 type Props = {
   mode: "form" | "code";
-  formData: ResumeForm;
-  onFormChange: (data: ResumeForm) => void;
   latex: string;
   onLatexChange: (latex: string) => void;
 };
 
-export default function EditorPanel({ mode, formData, onFormChange, latex, onLatexChange }: Props) {
+export default function EditorPanel({ mode, latex, onLatexChange }: Props) {
+  const { formData } = useResumeStore();
+
   return (
     <div className="w-1/2 flex flex-col border-r border-gray-200 overflow-hidden">
       {mode === "form" ? (
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
-          <HeaderFields data={formData} onChange={onFormChange} />
-          <SkillsFields data={formData} onChange={onFormChange} />
-          <ExperienceFields data={formData} onChange={onFormChange} />
-          <ProjectFields data={formData} onChange={onFormChange} />
-          <EducationFields data={formData} onChange={onFormChange} />
-          <AchievementsFields data={formData} onChange={onFormChange} />
+          <HeaderFields />
+          <SkillsFields />
+          <ExperienceFields />
+          <ProjectFields />
+          <EducationFields />
+          <AchievementsFields />
         </div>
       ) : (
         <CodeEditor value={latex} onChange={onLatexChange} />

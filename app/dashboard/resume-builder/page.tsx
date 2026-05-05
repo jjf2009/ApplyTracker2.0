@@ -10,8 +10,10 @@ import TopBar from "@/components/resume-builder/TopBar";
 import EditorPanel from "@/components/resume-builder/EditorPanel";
 import PreviewPanel from "@/components/resume-builder/PreviewPanel";
 
+import { useResumeStore } from "@/store/useResumeStore";
+
 export default function ResumeBuilderPage() {
-  const [formData, setFormData] = useState<ResumeForm>(defaultForm);
+  const { formData, setFormData } = useResumeStore();
   const [latex, setLatex] = useState<string>("");
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [mode, setMode] = useState<"form" | "code">("form");
@@ -94,8 +96,6 @@ export default function ResumeBuilderPage() {
       <div className="flex flex-1 overflow-hidden">
         <EditorPanel
           mode={mode}
-          formData={formData}
-          onFormChange={setFormData}
           latex={latex}
           onLatexChange={setLatex}
         />
