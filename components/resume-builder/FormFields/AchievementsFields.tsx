@@ -21,7 +21,7 @@ export default function AchievementsFields({ data, onChange }: Props) {
         <h2 className="text-xs uppercase tracking-widest text-gray-500">Achievements</h2>
         <button
           onClick={() => onChange({ ...data, achievements: [...achievements, ""] })}
-          className="text-xs text-purple-400 hover:text-purple-300"
+          className="text-xs text-purple-600 hover:text-purple-700 font-medium"
         >
           + Add
         </button>
@@ -33,9 +33,9 @@ export default function AchievementsFields({ data, onChange }: Props) {
               value={a}
               onChange={e => update(i, e.target.value)}
               placeholder="e.g. 2x Hackathon Winner – ..."
-              className="flex-1 bg-gray-800 text-white text-sm px-3 py-2 rounded border border-gray-700 focus:border-purple-500 focus:outline-none"
+              className="flex-1 bg-white text-gray-900 text-sm px-3 py-2 rounded border border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
             />
-            <button onClick={() => remove(i)} className="text-red-400 text-xs px-2">×</button>
+            <button onClick={() => remove(i)} className="text-red-500 text-xs px-2 hover:text-red-600">×</button>
           </div>
         ))}
       </div>

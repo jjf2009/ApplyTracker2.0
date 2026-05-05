@@ -1,70 +1,109 @@
 "use client";
 
-import { useState } from "react";
-import { compileLatex } from "@/lib/services/latex.service";
+import { useState, useEffect, useRef } from "react";
+import { ResumeForm, Resume } from "@/types/resume";
+import { defaultForm } from "@/lib/defaultForm";
+import { generateLatex } from "@/lib/generateLatex";
+import { compileLatex } from "@/services/latex.service";
+import { saveResume } from "@/lib/storage";
+import TopBar from "@/components/resume-builder/TopBar";
+import EditorPanel from "@/components/resume-builder/EditorPanel";
+import PreviewPanel from "@/components/resume-builder/PreviewPanel";
 
-export default function ResumeBuilder() {
-  const [latex, setLatex] = useState(`\\documentclass{article}
-\\begin{document}
-Hello Trackerezz
-\\end{document}`);
-
+export default function ResumeBuilderPage() {
+  const [formData, setFormData] = useState<ResumeForm>(defaultForm);
+  const [latex, setLatex] = useState<string>("");
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<"form" | "code">("form");
+  const [compileState, setCompileState] = useState<"idle" | "compiling" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [resumeTitle, setResumeTitle] = useState<string>("My Resume");
+  const resumeIdRef = useRef<string>(crypto.randomUUID());
+  const prevUrlRef = useRef<string | null>(null);
+
+  // When form changes → regenerate LaTeX
+  useEffect(() => {
+    if (mode === "form") {
+      setLatex(generateLatex(formData));
+    }
+  }, [formData, mode]);
 
   const handleCompile = async () => {
-    setLoading(true);
+    if (!latex.trim()) return;
+    
     try {
+      setCompileState("compiling");
+      setErrorMsg("");
+
       const blob = await compileLatex(latex);
+
+      // Revoke previous blob URL to prevent memory leak
+      if (prevUrlRef.current) {
+        URL.revokeObjectURL(prevUrlRef.current);
+      }
+
       const url = URL.createObjectURL(blob);
+      prevUrlRef.current = url;
       setPdfUrl(url);
-    } catch (err) {
-      console.error(err);
-      alert("Compilation failed");
-    } finally {
-      setLoading(false);
+      setCompileState("idle");
+    } catch (err: any) {
+      setCompileState("error");
+      setErrorMsg(err.message || "Compile failed");
     }
   };
 
-  const handleDownload = () => {
+  // Cleanup blob URL on unmount
+  useEffect(() => {
+    return () => {
+      if (prevUrlRef.current) URL.revokeObjectURL(prevUrlRef.current);
+    };
+  }, []);
+
+  function handleSave() {
+    const resume: Resume = {
+      id: resumeIdRef.current,
+      title: resumeTitle,
+      formData,
+      latex,
+      updatedAt: Date.now(),
+    };
+    saveResume(resume);
+  }
+
+  function handleDownload() {
     if (!pdfUrl) return;
     const a = document.createElement("a");
     a.href = pdfUrl;
-    a.download = "resume.pdf";
+    a.download = `${resumeTitle.replace(/\s+/g, "_")}.pdf`;
     a.click();
-  };
+  }
 
   return (
-    <div className="flex h-screen">
-      
-      {/* LEFT: Editor */}
-      <div className="w-1/2 p-4 flex flex-col gap-2">
-        <textarea
-          value={latex}
-          onChange={(e) => setLatex(e.target.value)}
-          className="flex-1 border p-2 font-mono"
+    <div className="flex flex-col h-screen bg-white text-gray-900">
+      <TopBar
+        title={resumeTitle}
+        onTitleChange={setResumeTitle}
+        mode={mode}
+        onModeChange={setMode}
+        onSave={handleSave}
+        onDownload={handleDownload}
+        onCompile={handleCompile}
+        compileState={compileState}
+        pdfReady={!!pdfUrl}
+      />
+      <div className="flex flex-1 overflow-hidden">
+        <EditorPanel
+          mode={mode}
+          formData={formData}
+          onFormChange={setFormData}
+          latex={latex}
+          onLatexChange={setLatex}
         />
-
-        <div className="flex gap-2">
-          <button onClick={handleCompile}>
-            {loading ? "Compiling..." : "Compile"}
-          </button>
-
-          <button onClick={handleDownload} disabled={!pdfUrl}>
-            Download PDF
-          </button>
-        </div>
-      </div>
-
-      {/* RIGHT: PDF Preview */}
-      <div className="w-1/2 border-l">
-        {pdfUrl ? (
-          <iframe src={pdfUrl} className="w-full h-full" />
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            No preview yet
-          </div>
-        )}
+        <PreviewPanel
+          pdfUrl={pdfUrl}
+          compileState={compileState}
+          errorMsg={errorMsg}
+        />
       </div>
     </div>
   );

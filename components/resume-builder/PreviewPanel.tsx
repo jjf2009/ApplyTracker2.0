@@ -8,7 +8,7 @@ type Props = {
 
 export default function PreviewPanel({ pdfUrl, compileState, errorMsg }: Props) {
   return (
-    <div className="w-1/2 flex flex-col bg-gray-950 overflow-hidden">
+    <div className="w-1/2 flex flex-col bg-gray-50 overflow-hidden">
       {compileState === "error" ? (
         <div className="flex-1 flex flex-col items-center justify-center p-6">
           <p className="text-red-400 text-sm font-mono mb-2">LaTeX compile error:</p>

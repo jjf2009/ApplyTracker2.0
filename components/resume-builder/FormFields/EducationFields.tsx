@@ -21,7 +21,7 @@ export default function EducationFields({ data, onChange }: Props) {
         <h2 className="text-xs uppercase tracking-widest text-gray-500">Education</h2>
         <button
           onClick={() => onChange({ ...data, education: [...education, newEdu()] })}
-          className="text-xs text-purple-400 hover:text-purple-300"
+          className="text-xs text-purple-600 hover:text-purple-700 font-medium"
         >
           + Add
         </button>
@@ -29,12 +29,12 @@ export default function EducationFields({ data, onChange }: Props) {
 
       <div className="space-y-4">
         {education.map((edu, i) => (
-          <div key={edu.id} className="bg-gray-900 rounded p-4 border border-gray-800 space-y-2">
+          <div key={edu.id} className="bg-gray-50 rounded p-4 border border-gray-200 space-y-2">
             <div className="flex justify-between">
               <span className="text-xs text-gray-500">Entry {i + 1}</span>
               <button
                 onClick={() => onChange({ ...data, education: education.filter((_, j) => j !== i) })}
-                className="text-xs text-red-400"
+                className="text-xs text-red-500 hover:text-red-600"
               >
                 Remove
               </button>
@@ -48,11 +48,11 @@ export default function EducationFields({ data, onChange }: Props) {
               ["grade", "Grade (e.g. SGPA: 9/10)"],
             ] as [keyof Education, string][]).map(([field, label]) => (
               <div key={field}>
-                <label className="block text-xs text-gray-400 mb-1">{label}</label>
+                <label className="block text-xs text-gray-600 mb-1">{label}</label>
                 <input
                   value={edu[field] as string}
                   onChange={e => updateEdu(i, field, e.target.value)}
-                  className="w-full bg-gray-800 text-white text-sm px-3 py-2 rounded border border-gray-700 focus:border-purple-500 focus:outline-none"
+                  className="w-full bg-white text-gray-900 text-sm px-3 py-2 rounded border border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
                 />
               </div>
             ))}

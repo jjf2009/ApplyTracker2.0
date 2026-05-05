@@ -22,7 +22,7 @@ type Props = {
 
 export default function EditorPanel({ mode, formData, onFormChange, latex, onLatexChange }: Props) {
   return (
-    <div className="w-1/2 flex flex-col border-r border-gray-800 overflow-hidden">
+    <div className="w-1/2 flex flex-col border-r border-gray-200 overflow-hidden">
       {mode === "form" ? (
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           <HeaderFields data={formData} onChange={onFormChange} />

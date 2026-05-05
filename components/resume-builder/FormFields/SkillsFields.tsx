@@ -17,11 +17,11 @@ export default function SkillsFields({ data, onChange }: Props) {
       <div className="space-y-3">
         {skillFields.map(f => (
           <div key={f.key}>
-            <label className="block text-xs text-gray-400 mb-1">{f.label}</label>
+            <label className="block text-xs text-gray-600 mb-1">{f.label}</label>
             <input
               value={data.skills[f.key]}
               onChange={e => onChange({ ...data, skills: { ...data.skills, [f.key]: e.target.value } })}
-              className="w-full bg-gray-800 text-white text-sm px-3 py-2 rounded border border-gray-700 focus:border-purple-500 focus:outline-none"
+              className="w-full bg-white text-gray-900 text-sm px-3 py-2 rounded border border-gray-200 focus:border-purple-500 focus:outline-none transition-colors"
             />
           </div>
         ))}

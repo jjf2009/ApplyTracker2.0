@@ -262,7 +262,6 @@ export function generateLatex(data: ResumeForm): string {
 \\usepackage{multirow}
 \\titleformat{\\section}{\\Large\\scshape\\raggedright}{}{0em}{}[\\titlerule]
 \\titlespacing{\\section}{0pt}{3pt}{3pt}
-\\usepackage[style=authoryear,sorting=ynt, maxbibnames=2]{biblatex}
 \\color[HTML]{110223}
 \\setlength\\bibitemsep{1em}
 \\usepackage{fontawesome5}
